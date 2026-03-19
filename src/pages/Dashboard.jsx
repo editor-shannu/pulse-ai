@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useAppContext } from '../context/AppContext';
-import { CheckCircle, AlertTriangle, ArrowUpCircle, Flame, Dumbbell, ArrowLeft, Play, ChevronRight } from 'lucide-react';
+import { CheckCircle, AlertTriangle, ArrowUpCircle, Flame, Dumbbell, ArrowLeft, Play, ChevronRight, LogOut } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { userProfile, currentPlan, markWorkoutCompleted, updatePlanIntensity } = useAppContext();
+  const { userProfile, currentPlan, markWorkoutCompleted, updatePlanIntensity, logout } = useAppContext();
   const navigate = useNavigate();
   const [activeExerciseIndex, setActiveExerciseIndex] = useState(null);
   const [workoutView, setWorkoutView] = useState('summary'); // summary | days | detail
@@ -103,16 +103,18 @@ const Dashboard = () => {
       
       {/* Top Header bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <button style={{ background: 'none', border: 'none', padding: '0', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <div style={{ width: '20px', height: '2px', backgroundColor: '#212121' }}></div>
-          <div style={{ width: '20px', height: '2px', backgroundColor: '#212121' }}></div>
-          <div style={{ width: '14px', height: '2px', backgroundColor: '#212121' }}></div>
-        </button>
-        <span style={{ fontSize: '14px', fontWeight: 'bold' }}>PulseAI</span>
-        <button style={{ background: 'none', border: 'none', padding: '0', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '3px', alignItems: 'center' }}>
-          <div style={{ width: '4px', height: '4px', backgroundColor: '#212121', borderRadius: '50%' }}></div>
-          <div style={{ width: '4px', height: '4px', backgroundColor: '#212121', borderRadius: '50%' }}></div>
-          <div style={{ width: '4px', height: '4px', backgroundColor: '#212121', borderRadius: '50%' }}></div>
+        <span style={{ fontSize: '18px', fontWeight: '900', color: '#65B5F6' }}>PulseAI</span>
+
+        <button 
+          onClick={() => {
+            if (window.confirm('Are you sure you want to log out?')) {
+               logout();
+            }
+          }}
+          style={{ background: 'none', border: 'none', padding: '0', cursor: 'pointer', color: '#E53935', display: 'flex', alignItems: 'center', gap: '5px' }}
+        >
+          <LogOut size={20} />
+          <span style={{ fontSize: '14px', fontWeight: 'bold' }}>Logout</span>
         </button>
       </div>
 
@@ -121,12 +123,6 @@ const Dashboard = () => {
         <h1 style={{ margin: 0, fontSize: '28px', fontWeight: '800', fontFamily: 'Merriweather', color: '#1A1A1A' }}>
           Find Your<br/>Workout Class
         </h1>
-      </div>
-      
-      {/* Search Bar */}
-      <div style={{ backgroundColor: '#F5F5F5', borderRadius: '20px', padding: '12px 20px', display: 'flex', alignItems: 'center', marginBottom: '24px' }}>
-        <span style={{ color: '#BDBDBD', marginRight: '10px' }}>🔍</span>
-        <input type="text" placeholder="Search" style={{ border: 'none', background: 'transparent', outline: 'none', width: '100%', fontSize: '15px' }} />
       </div>
 
       {/* Workout Progress Card */}
@@ -142,73 +138,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Grid of 4 Items - Now Responsive */}
-      <div className="dashboard-grid" style={{ marginBottom: '30px' }}>
-        
-        {/* Calories (Light Blue) */}
-        <div 
-          onClick={() => navigate('/diet')}
-          style={{ backgroundColor: '#E3F2FD', borderRadius: '25px', padding: '20px', display: 'flex', flexDirection: 'column', height: '160px', cursor: 'pointer', transition: '0.3s' }}
-          className="metric-card"
-        >
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '16px', fontWeight: 'bold', color: '#1A1B20' }}>Calories</span>
-            <Flame size={20} color="#65B5F6" />
-          </div>
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ width: '85px', height: '85px', borderRadius: '50%', border: '8px solid #1A1B20', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', borderRightColor: 'transparent', transform: 'rotate(45deg)' }}>
-              <div style={{ transform: 'rotate(-45deg)', textAlign: 'center' }}>
-                <span style={{ fontSize: '22px', fontWeight: '900' }}>730</span><br/>
-                <span style={{ fontSize: '10px', color: '#757575', fontWeight: 'bold' }}>/kCal</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Steps (Light Orange) */}
-        <div 
-          style={{ backgroundColor: '#FDF1EA', borderRadius: '25px', padding: '20px', display: 'flex', flexDirection: 'column', height: '160px', transition: '0.3s' }}
-          className="metric-card"
-        >
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '15px' }}>
-            <span style={{ fontSize: '15px', color: '#BDBDBD', fontWeight: 'bold' }}>Steps Walked</span>
-          </div>
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontSize: '42px', fontWeight: '900', color: '#212121' }}>230</span>
-            <div style={{ width: '100%', height: '4px', backgroundColor: '#FFFFFF', borderRadius: '2px', marginTop: '10px' }}>
-               <div style={{ width: '40%', height: '100%', backgroundColor: '#E8A382', borderRadius: '2px' }}></div>
-            </div>
-          </div>
-        </div>
-
-        {/* Sleep (Light Blue/Purple) */}
-        <div 
-          style={{ backgroundColor: '#F3E5F5', borderRadius: '25px', padding: '20px', display: 'flex', flexDirection: 'column', height: '160px', transition: '0.3s' }}
-          className="metric-card"
-        >
-           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <span style={{ fontSize: '16px', fontWeight: 'bold' }}>Sleep</span>
-              <span style={{ color: '#9C27B0' }}>🌙</span>
-           </div>
-           <div style={{ flex: 1, display: 'flex', alignItems: 'baseline', gap: '5px' }}>
-              <span style={{ fontSize: '36px', fontWeight: '900' }}>5:30</span>
-              <span style={{ fontSize: '14px', color: '#9E9E9E', fontWeight: 'bold' }}>hrs</span>
-           </div>
-           <div style={{ fontSize: '11px', color: '#9E9E9E', fontWeight: 'bold' }}>Deep Sleep: 2h 15m</div>
-        </div>
-
-        {/* Session (Interactive Background) */}
-        <div 
-          onClick={() => navigate('/community')}
-          style={{ backgroundColor: '#1A1A1A', borderRadius: '25px', height: '160px', overflow: 'hidden', position: 'relative', backgroundImage: 'url(https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=300)', backgroundSize: 'cover', backgroundPosition: 'center', cursor: 'pointer', transition: '0.3s' }}
-          className="metric-card"
-        >
-          <div style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.3)' }}></div>
-          <div style={{ position: 'absolute', bottom: '15px', left: '15px', background: '#FFFFFF', padding: '5px 12px', borderRadius: '15px', fontSize: '12px', fontWeight: '900', color: '#1A1B20' }}>
-            Join Class
-          </div>
-        </div>
-      </div>
 
       {!currentPlan.is30Day && (
         <div style={{ backgroundColor: '#FDF1EA', borderRadius: '30px', padding: '30px', marginBottom: '30px', border: '1px solid #F7DFD4' }} className="metric-card">
